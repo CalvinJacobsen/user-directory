@@ -1,0 +1,41 @@
+.content {
+    height:100%;
+    padding:1px;
+}
+
+.main {
+    height:100%;
+    padding:0px;
+
+}
+
+.window {
+    height:100vh;
+    padding:0px;
+}
+
+.sideBar {
+    position:fixed;
+    padding:0px;
+    width:250px;
+    display:flex;
+    height:100%;
+}
+
+.artCon {
+    height:100%;
+    display:inline-block;
+    background-color:#022140;
+}
+
+.topRow {
+    height:10%;
+}
+
+.botRow {
+    height:90%;
+}
+
+.half {
+    height:50%;
+}

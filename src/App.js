@@ -3,6 +3,7 @@ import React from "react";
 import './App.css';
 import Navbar from "./components/Navbar";
 import Table from "./components/Table";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
