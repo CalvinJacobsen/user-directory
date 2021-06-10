@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Col, Row, Container } from "../Grid";
 import API from "../../utils/API";
+import EmployeeTemplate from "./EmployeeTemplate";
 import './style.css'
 
 
@@ -29,17 +30,22 @@ class Search extends Component {
         this.searchMovies(this.state.search);
     };
 
-
-
-
-
-
-
     render() {
-        return(
-            <div >
+        return (
+            <Container>
+                {(this.state.results).map((employee) =>
+            
+                    <EmployeeTemplate
+                        id={employees.login.username}
+                        picture={employees.picture.medium}
+                        first={employees.name.first}
+                        last={employees.name.last}
+                        phone={employees.cell}
+                        email={employees.email}
+                    />
 
-            </div >
+                )}
+            </Container>
         );
     };
 
