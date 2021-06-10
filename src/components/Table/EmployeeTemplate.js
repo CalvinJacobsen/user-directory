@@ -1,14 +1,17 @@
 import React from "react";
 
-function EmployeeTemplate (props) {
+function EmployeeTemplate(props) {
+    const imageName = props.first + "_" + props.last + "'s_Photo";
 
     return (
-        <tr id={props.id}>
-            <td><img alt={altTag} src={props.picture}></img></td>
-            <td>{props.first} {props.last} </td>
-            <td>{props.email}</td>
-            <td>{props.phone}</td>
-        </tr>
+        <thead>
+            <tr id={props.id}>
+                <td><img alt={imageName} src={props.picture}></img></td>
+                <td>{props.first} {props.last} </td>
+                <td>{props.email}</td>
+                <td>{props.phone}</td>
+            </tr>
+        </thead>
     )
 
 }

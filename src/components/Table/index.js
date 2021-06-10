@@ -1,54 +1,102 @@
 import React, { Component } from "react";
-import { Col, Row, Container } from "../Grid";
+import { Container } from "../Grid";
 import API from "../../utils/API";
 import EmployeeTemplate from "./EmployeeTemplate";
+import Search from "./Search";
 import './style.css'
 
 
-class Search extends Component {
+class Table extends Component {
+
     state = {
-        search: "",
-        results: []
+        result: [],
+        filteredResult: [],
+        search: ""
     };
 
-    generateUsers = query => {
-        API.search(query)
-            .then(res => this.setState({ result: res.data }))
+    componentDidMount() {
+        this.getEmployees();
+    }
+
+
+
+    getEmployees = () => {
+        API.getUsers()
+            .then(res => {
+
+                this.setState({
+                    result: res.data.results,
+                    filteredResult: res.data.results
+                })
+            })
             .catch(err => console.log(err));
+            console.log(this.state.results)
     };
+
+
 
     handleInputChange = event => {
         const value = event.target.value;
         const name = event.target.name;
+
+        console.log(value);
+        console.log(name);
+
+        let filter = (this.state.result).filter(employee => {
+            if (value == employee.name.first) {
+
+                return true;
+            } else if (value == employee.name.last) {
+
+                return true;
+            }
+
+
+        })
+
         this.setState({
+            filteredResult: filter,
             [name]: value
         });
     };
 
-    handleFormSubmit = event => {
-        event.preventDefault();
-        this.searchMovies(this.state.search);
-    };
-
     render() {
         return (
-            <Container>
-                {(this.state.results).map((employee) =>
-            
-                    <EmployeeTemplate
-                        id={employees.login.username}
-                        picture={employees.picture.medium}
-                        first={employees.name.first}
-                        last={employees.name.last}
-                        phone={employees.cell}
-                        email={employees.email}
-                    />
+            <>
+                <Search
+                    handleInputChange={this.handleInputChange}
+                    search={this.state.search}
+                />
 
-                )}
-            </Container>
+                <table className="table table-striped">
+                    <thead>
+                        <tr key="main-head">
+                            <td scope="col">Image</td>
+                            <td scope="col">Name</td>
+                            <td scope="col">Phone</td>
+                            <td scope="col">Email</td>
+                        </tr>
+                    </thead>
+
+                    <Container className="employees" >
+                        {(this.state.result).map((employee) =>
+
+                            <EmployeeTemplate
+                                id={employee.login.username}
+                                picture={employee.picture.medium}
+                                first={employee.name.first}
+                                last={employee.name.last}
+                                phone={employee.cell}
+                                email={employee.email}
+                            />
+
+                        )}
+                    </Container>
+                </table>
+            </>
         );
     };
 
 }
 
-export default Search;
+export default Table;
