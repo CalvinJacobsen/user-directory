@@ -6,10 +6,10 @@ function EmployeeTemplate(props) {
     return (
         <thead>
             <tr id={props.id}>
-                <td><img alt={imageName} src={props.picture}></img></td>
-                <td>{props.first} {props.last} </td>
-                <td>{props.email}</td>
-                <td>{props.phone}</td>
+                <td className="listItem empProfileIMG"><img alt={imageName} src={props.picture}></img></td>
+                <td className="listItem empName">{props.first} {props.last} </td>
+                <td className="listItem empEmail">{props.email}</td>
+                <td className="listItem empPhone">{props.phone}</td>
             </tr>
         </thead>
     )

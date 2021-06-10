@@ -1,24 +1,25 @@
-import React, { Component } from "react";
+import React, { useState, Component } from "react";
 import { Container } from "../Grid";
 import API from "../../utils/API";
 import EmployeeTemplate from "./EmployeeTemplate";
-import Search from "./Search";
 import './style.css'
 
 
 class Table extends Component {
+    constructor(props) {
+        super(props)
 
-    state = {
-        result: [],
-        filteredResult: [],
-        search: ""
-    };
+        this.state = {
+            result: [],
+            sorted: false,
+        };
+
+        this.handleNameSorting = this.handleNameSorting.bind(this)
+    }
 
     componentDidMount() {
         this.getEmployees();
     }
-
-
 
     getEmployees = () => {
         API.getUsers()
@@ -26,77 +27,74 @@ class Table extends Component {
 
                 this.setState({
                     result: res.data.results,
-                    filteredResult: res.data.results
                 })
             })
             .catch(err => console.log(err));
-            console.log(this.state.results)
+        console.log(this.state.results)
+    };
+
+    handleNameSorting() {
+        if (this.state.sorted === false) {
+            this.setState({
+                sorted: true
+            })
+            console.log(this.state.sorted)
+        } else {
+            this.setState({
+                sorted: false
+            })
+            console.log(this.state.sorted)
+        }
     };
 
 
-
-    handleInputChange = event => {
-        const value = event.target.value;
-        const name = event.target.name;
-
-        console.log(value);
-        console.log(name);
-
-        let filter = (this.state.result).filter(employee => {
-            if (value == employee.name.first) {
-
-                return true;
-            } else if (value == employee.name.last) {
-
-                return true;
-            }
-
-
-        })
-
-        this.setState({
-            filteredResult: filter,
-            [name]: value
-        });
-    };
 
     render() {
         return (
             <>
-                <Search
-                    handleInputChange={this.handleInputChange}
-                    search={this.state.search}
-                />
 
                 <table className="table table-striped">
-                    <thead>
-                        <tr key="main-head">
-                            <td scope="col">Image</td>
-                            <td scope="col">Name</td>
-                            <td scope="col">Phone</td>
-                            <td scope="col">Email</td>
-                        </tr>
-                    </thead>
+                    <Container>
+                        <thead>
+                            <ul key="main-head">
+                                <li className="tableKey imgKey" >Image</li>
+                                {this.state.sorted ? 
+                                <li className="tableKey nameKey" onClick={this.handleNameSorting} style={{color: 'blue'}}><u>Name⟰</u></li> 
+                                : <li className="tableKey nameKey" onClick={this.handleNameSorting} style={{color: 'red'}}><u>Name⟱</u></li> }
+                                <li className="tableKey emailKey">Email</li>
+                                <li className="tableKey">Phone</li>
+
+                            </ul>
+                        </thead>
+                    </Container>
 
                     <Container className="employees" >
-                        {(this.state.result).map((employee) =>
-
-                            <EmployeeTemplate
-                                id={employee.login.username}
-                                picture={employee.picture.medium}
-                                first={employee.name.first}
-                                last={employee.name.last}
-                                phone={employee.cell}
-                                email={employee.email}
-                            />
-
-                        )}
+                        {this.state.sorted
+                            ? (this.state.result).sort((a, b) => a.name.first > b.name.first ? 1 : -1).map((employee) =>
+                                <EmployeeTemplate
+                                    id={employee.login.username}
+                                    picture={employee.picture.medium}
+                                    first={employee.name.first}
+                                    last={employee.name.last}
+                                    phone={employee.cell}
+                                    email={employee.email}
+                                />
+                            )
+                            : (this.state.result).sort((a, b) => a.name.first < b.name.first ? 1 : -1).map((employee) =>
+                                    <EmployeeTemplate
+                                        id={employee.login.username}
+                                        picture={employee.picture.medium}
+                                        first={employee.name.first}
+                                        last={employee.name.last}
+                                        phone={employee.cell}
+                                        email={employee.email}
+                                    />
+                                )}
                     </Container>
                 </table>
             </>
         );
     };
-
-}
+};
 
 export default Table;
